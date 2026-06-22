@@ -21,7 +21,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-14 min-h-screen bg-amber-900">
+    <main className="mx-auto max-w-5xl px-6 py-14 min-h-screen bg-amber-800">
       <header className="mb-12 text-center">
         <div className="mb-3 inline-flex animate-float items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-violet-200">
           🎲 play together, instantly

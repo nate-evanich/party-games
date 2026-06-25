@@ -40,7 +40,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
   const hasSubmitted = (g.submitted ?? []).includes(myKey);
   const hasVoted = (g.voted ?? []).includes(myKey);
 
-  const [statements, setStatements] = useState(["", "", ""]);
+  const [statements, setStatements] = useState(["", "", "", ""]);
   const [lieIndex, setLieIndex] = useState<number | null>(null);
   const [myChoice, setMyChoice] = useState<number | null>(null);
   const prevPhase = useRef(phase);

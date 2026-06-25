@@ -63,7 +63,7 @@ function doReveal(room) {
   const g = room.game;
   const lieIndex = room.private.lies[g.featuredKey];
   const choices = { ...room.private.votes };
-  const counts = [0, 0, 0];
+  const counts = [0, 0, 0, 0];
   let fooled = 0;
   for (const [k, c] of Object.entries(choices)) {
     counts[c] += 1;

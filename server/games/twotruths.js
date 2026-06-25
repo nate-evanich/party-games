@@ -139,7 +139,7 @@ function register(io, socket, { room, broadcastState }) {
     const key = myKey();
     if (!key || key === g.featuredKey || g.voted.includes(key)) return;
     const c = Number(choice);
-    if (![0, 1, 2].includes(c)) return;
+    if (![0, 1, 2, 3].includes(c)) return;
     ensurePlayer(room, myName);
     room.private.votes[key] = c;
     g.voted.push(key);

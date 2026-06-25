@@ -28,8 +28,8 @@
   },
   {
     "id": "two-truths",
-    "name": "Two Truths & a Lie",
-    "blurb": "Submit three statements, the room guesses the lie.",
+    "name": "Three Truths & a Lie",
+    "blurb": "Submit four statements, the room guesses the lie.",
     "emoji": "🕵️",
     "accent": "#ff7a59",
     "minPlayers": 3,

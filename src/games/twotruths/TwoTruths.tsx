@@ -305,6 +305,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
     const medals = ["🥇", "🥈", "🥉"];
     return (
       <div className="mx-auto max-w-md text-center">
+        {errorPopup}
         <p className="mb-2 text-4xl">🏆</p>
         <h2 className="mb-6 text-3xl font-black">Best liars & lie detectors</h2>
         <ul className="flex flex-col gap-2">

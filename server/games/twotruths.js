@@ -1,7 +1,8 @@
-// Two Truths & a Lie.
+// Three Truths & a Lie.
 //
-// Everyone submits 3 statements (server shuffles them so the lie's position is
-// random) and marks the lie. Then one player at a time is "featured": everyone
+// Everyone submits 4 statements (3 truths + 1 lie; server shuffles them so the
+// lie's position is random) and marks the lie. Then one player at a time is
+// "featured": everyone
 // else votes which statement is the lie. Correct guessers score; the featured
 // player scores for every guesser they fool.
 //
@@ -62,7 +63,7 @@ function doReveal(room) {
   const g = room.game;
   const lieIndex = room.private.lies[g.featuredKey];
   const choices = { ...room.private.votes };
-  const counts = [0, 0, 0];
+  const counts = [0, 0, 0, 0];
   let fooled = 0;
   for (const [k, c] of Object.entries(choices)) {
     counts[c] += 1;
@@ -113,13 +114,13 @@ function register(io, socket, { room, broadcastState }) {
     }
     const key = myKey();
     if (!key || g.submitted.includes(key)) return;
-    if (!Array.isArray(statements) || statements.length !== 3) return;
+    if (!Array.isArray(statements) || statements.length !== 4) return;
     const clean = statements.map((s) => String(s || "").trim().slice(0, 140));
     if (clean.some((s) => !s)) return;
     const li = Number(lieIndex);
-    if (![0, 1, 2].includes(li)) return;
+    if (![0, 1, 2, 3].includes(li)) return;
     // Shuffle so the lie's position can't be inferred from input order.
-    const perm = shuffle([0, 1, 2]);
+    const perm = shuffle([0, 1, 2, 3]);
     room.private.statements[key] = perm.map((i) => clean[i]);
     room.private.lies[key] = perm.indexOf(li);
     ensurePlayer(room, myName);
@@ -141,7 +142,7 @@ function register(io, socket, { room, broadcastState }) {
     const key = myKey();
     if (!key || key === g.featuredKey || g.voted.includes(key)) return;
     const c = Number(choice);
-    if (![0, 1, 2].includes(c)) return;
+    if (![0, 1, 2, 3].includes(c)) return;
     ensurePlayer(room, myName);
     room.private.votes[key] = c;
     g.voted.push(key);

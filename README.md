@@ -30,7 +30,7 @@ browser tab (or on your phone, on the same network) to play along.
 | 🎡 Random Picker | Spin the wheel to pick who goes next. |
 | 🔀 Disordered Order | Crack the hidden emoji order, Mastermind-style. |
 | 🧠 Beopardy | Buzz-in trivia with Daily Doubles and a final round. |
-| 🕵️ Two Truths & a Lie | Submit three statements, the room guesses the lie. |
+| 🕵️ Three Truths & a Lie | Submit four statements, the room guesses the lie. |
 | 🎤 Punchline | One prompt, your funniest answer, the room votes. |
 | 🟦 Buzzword Bingo | _(stub — wire it up as your first contribution)_ |
 

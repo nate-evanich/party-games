@@ -86,6 +86,7 @@ export default function Disordered({ socket, me, members, game }: GameProps) {
       setSelected(null);
       setSolved(false);
       setLocked(new Set());
+      setShowThanks(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundId, phase]);

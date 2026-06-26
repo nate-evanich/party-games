@@ -126,6 +126,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
       .filter((k) => !(g.submitted ?? []).includes(k));
     return (
       <div className="mx-auto max-w-lg">
+        {errorPopup}
         <div className="mb-6 text-center">
           <div className="mb-2 text-5xl">🕵️</div>
           <h2 className="text-2xl font-black">Two Truths & a Lie</h2>

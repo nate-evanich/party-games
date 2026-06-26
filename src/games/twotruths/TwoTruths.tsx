@@ -205,6 +205,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
     const reveal = g.reveal;
     return (
       <div className="mx-auto max-w-lg">
+        {errorPopup}
         {rail}
         <p className="mb-1 text-center text-xs font-semibold uppercase tracking-wide text-violet-100/40">
           Round {(g.roundIdx ?? 0) + 1} / {g.order?.length ?? "?"}

@@ -79,6 +79,27 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
     return players[key]?.name ?? key;
   }
 
+  const errorPopup = errorMessage ? (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={() => setErrorMessage(null)}
+    >
+      <div
+        className="mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-violet-950 p-6 text-center shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 text-4xl">⚠️</div>
+        <p className="mb-5 text-base leading-relaxed text-violet-100/90">{errorMessage}</p>
+        <button
+          onClick={() => setErrorMessage(null)}
+          className="rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 px-8 py-2.5 font-black uppercase tracking-wide transition hover:scale-[1.02]"
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   const rail = (
     <div className="mb-6 flex flex-wrap gap-2">
       {playerList.map((p) => (

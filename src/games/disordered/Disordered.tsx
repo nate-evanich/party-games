@@ -485,6 +485,28 @@ export default function Disordered({ socket, me, members, game }: GameProps) {
         </ul>
         <p className="mt-2 text-xs text-violet-100/30">guesses so far</p>
       </aside>
+
+      {showThanks && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="disordered-thanks-title"
+        >
+          <div className="animate-pop-in mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-slate-900/95 p-6 text-center shadow-2xl">
+            <p id="disordered-thanks-title" className="mb-5 text-2xl font-black text-sky-200">
+              🙏 Thanks!
+            </p>
+            <button
+              onClick={() => setShowThanks(false)}
+              autoFocus
+              className="rounded-xl bg-gradient-to-br from-sky-500 to-violet-500 px-6 py-2 text-base font-black uppercase tracking-wide shadow-lg transition hover:scale-105 active:scale-95"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

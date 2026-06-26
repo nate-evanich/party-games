@@ -101,6 +101,7 @@ export default function Disordered({ socket, me, members, game }: GameProps) {
     }) {
       setHistory((h) => [{ order: p.order, correct: p.correct }, ...h]);
       if (p.solved) setSolved(true);
+      setShowThanks(true);
     }
     function onSolved(p: { id: string }) {
       const who = members.find((m) => m.id === p.id);

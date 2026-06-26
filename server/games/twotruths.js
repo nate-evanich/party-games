@@ -107,7 +107,10 @@ function register(io, socket, { room, broadcastState }) {
   const isHost = () => socket.id === g.hostId;
 
   socket.on("tt:submit", ({ statements, lieIndex } = {}) => {
-    if (g.phase !== "collect") return;
+    if (g.phase !== "collect") {
+      socket.emit("tt:error", { message: "The collection phase is over — you can't submit statements anymore." });
+      return;
+    }
     const key = myKey();
     if (!key || g.submitted.includes(key)) return;
     if (!Array.isArray(statements) || statements.length !== 3) return;

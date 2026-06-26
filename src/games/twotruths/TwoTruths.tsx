@@ -43,7 +43,19 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
   const [statements, setStatements] = useState(["", "", ""]);
   const [lieIndex, setLieIndex] = useState<number | null>(null);
   const [myChoice, setMyChoice] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const prevPhase = useRef(phase);
+
+  // Listen for server-side tt:error events (e.g. submit after collect phase ended).
+  useEffect(() => {
+    function onTtError(e: { message: string }) {
+      setErrorMessage(e.message);
+    }
+    socket.on("tt:error", onTtError);
+    return () => {
+      socket.off("tt:error", onTtError);
+    };
+  }, [socket]);
 
   // Reveal/gameover sounds on phase transitions.
   useEffect(() => {
@@ -66,6 +78,27 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
     if (!key) return "?";
     return players[key]?.name ?? key;
   }
+
+  const errorPopup = errorMessage ? (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={() => setErrorMessage(null)}
+    >
+      <div
+        className="mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-violet-950 p-6 text-center shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 text-4xl">⚠️</div>
+        <p className="mb-5 text-base leading-relaxed text-violet-100/90">{errorMessage}</p>
+        <button
+          onClick={() => setErrorMessage(null)}
+          className="rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 px-8 py-2.5 font-black uppercase tracking-wide transition hover:scale-[1.02]"
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+  ) : null;
 
   const rail = (
     <div className="mb-6 flex flex-wrap gap-2">
@@ -93,6 +126,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
       .filter((k) => !(g.submitted ?? []).includes(k));
     return (
       <div className="mx-auto max-w-lg">
+        {errorPopup}
         <div className="mb-6 text-center">
           <div className="mb-2 text-5xl">🕵️</div>
           <h2 className="text-2xl font-black">Two Truths & a Lie</h2>
@@ -171,6 +205,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
     const reveal = g.reveal;
     return (
       <div className="mx-auto max-w-lg">
+        {errorPopup}
         {rail}
         <p className="mb-1 text-center text-xs font-semibold uppercase tracking-wide text-violet-100/40">
           Round {(g.roundIdx ?? 0) + 1} / {g.order?.length ?? "?"}
@@ -270,6 +305,7 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
     const medals = ["🥇", "🥈", "🥉"];
     return (
       <div className="mx-auto max-w-md text-center">
+        {errorPopup}
         <p className="mb-2 text-4xl">🏆</p>
         <h2 className="mb-6 text-3xl font-black">Best liars & lie detectors</h2>
         <ul className="flex flex-col gap-2">

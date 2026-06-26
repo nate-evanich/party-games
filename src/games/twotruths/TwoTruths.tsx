@@ -43,7 +43,19 @@ export default function TwoTruths({ socket, me, members, game }: GameProps) {
   const [statements, setStatements] = useState(["", "", ""]);
   const [lieIndex, setLieIndex] = useState<number | null>(null);
   const [myChoice, setMyChoice] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const prevPhase = useRef(phase);
+
+  // Listen for server-side tt:error events (e.g. submit after collect phase ended).
+  useEffect(() => {
+    function onTtError(e: { message: string }) {
+      setErrorMessage(e.message);
+    }
+    socket.on("tt:error", onTtError);
+    return () => {
+      socket.off("tt:error", onTtError);
+    };
+  }, [socket]);
 
   // Reveal/gameover sounds on phase transitions.
   useEffect(() => {

@@ -45,21 +45,38 @@ export default function Home() {
         </p>
       </header>
 
-      <form onSubmit={joinRoom} className="mx-auto mb-12 flex max-w-md gap-2">
-        <input
-          value={joinCode}
-          onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-          placeholder="Got a room code?"
-          maxLength={6}
-          className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center font-mono text-lg tracking-widest outline-none transition focus:border-violet-400/50 focus:bg-white/10"
-        />
-        <button
-          type="submit"
-          className="rounded-xl bg-white/10 px-5 py-3 font-semibold transition hover:bg-white/20"
-        >
-          Join
-        </button>
-      </form>
+      <div className="mx-auto mb-12 max-w-md">
+        <form onSubmit={joinRoom} className="flex gap-2">
+          <input
+            value={joinCode}
+            onChange={(e) => {
+              setJoinCode(e.target.value.toUpperCase());
+              setJoinError(null);
+            }}
+            placeholder="Got a room code?"
+            maxLength={6}
+            aria-invalid={joinError ? true : undefined}
+            aria-describedby="join-code-error"
+            className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center font-mono text-lg tracking-widest outline-none transition focus:border-violet-400/50 focus:bg-white/10"
+          />
+          <button
+            type="submit"
+            className="rounded-xl bg-white/10 px-5 py-3 font-semibold transition hover:bg-white/20"
+          >
+            Join
+          </button>
+        </form>
+        {joinError && (
+          <p
+            id="join-code-error"
+            role="alert"
+            aria-live="polite"
+            className="mt-2 text-center text-sm text-rose-300"
+          >
+            {joinError}
+          </p>
+        )}
+      </div>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {GAMES.map((game) => {

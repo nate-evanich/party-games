@@ -8,6 +8,7 @@ import { makeRoomCode } from "@/lib/code";
 export default function Home() {
   const router = useRouter();
   const [joinCode, setJoinCode] = useState("");
+  const [joinError, setJoinError] = useState<string | null>(null);
 
   function startGame(gameId: string) {
     const code = makeRoomCode();
@@ -17,7 +18,16 @@ export default function Home() {
   function joinRoom(e: React.FormEvent) {
     e.preventDefault();
     const code = joinCode.trim().toUpperCase();
-    if (code.length >= 3) router.push(`/room/${code}`);
+    if (code.length === 0) {
+      setJoinError("Enter a room code to join.");
+      return;
+    }
+    if (code.length < 3) {
+      setJoinError("Room codes are at least 3 characters.");
+      return;
+    }
+    setJoinError(null);
+    router.push(`/room/${code}`);
   }
 
   return (

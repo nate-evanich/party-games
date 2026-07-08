@@ -19,6 +19,7 @@ export default function RoomPage({ params }: { params: { code: string } }) {
   const [state, setState] = useState<RoomState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   // Load any remembered name on first paint.
   useEffect(() => {

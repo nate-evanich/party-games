@@ -216,6 +216,11 @@ export default function RoomPage({ params }: { params: { code: string } }) {
           </ul>
         </aside>
       </div>
+      {renameToast && (
+        <div className="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-violet-600/90 px-5 py-2.5 text-sm font-semibold shadow-lg backdrop-blur">
+          {renameToast}
+        </div>
+      )}
     </main>
   );
 }

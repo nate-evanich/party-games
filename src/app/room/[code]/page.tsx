@@ -71,6 +71,22 @@ export default function RoomPage({ params }: { params: { code: string } }) {
     setName(trimmed);
   }
 
+  function submitRename(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = renameInput.trim();
+    if (!trimmed || trimmed === name) {
+      setRenaming(false);
+      return;
+    }
+    getSocket().emit("room:rename", { name: trimmed });
+    setName(trimmed);
+    localStorage.setItem(NAME_KEY, trimmed);
+    setRenaming(false);
+    setToast(`your name is now ${trimmed}`);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 2000);
+  }
+
   function copyLink() {
     navigator.clipboard.writeText(window.location.origin + `/room/${code}`);
     setCopied(true);

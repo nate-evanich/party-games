@@ -42,16 +42,22 @@ export default function RoomPage({ params }: { params: { code: string } }) {
     function onError(e: { message: string }) {
       setError(e.message);
     }
+    function onRenamed({ name }: { name: string }) {
+      setToast(`your name is now ${name}`);
+      setTimeout(() => setToast(null), 2500);
+    }
 
     socket.on("connect", join);
     socket.on("room:state", onState);
     socket.on("room:error", onError);
+    socket.on("room:renamed", onRenamed);
     if (socket.connected) join();
 
     return () => {
       socket.off("connect", join);
       socket.off("room:state", onState);
       socket.off("room:error", onError);
+      socket.off("room:renamed", onRenamed);
     };
   }, [name, code, requestedGame]);
 

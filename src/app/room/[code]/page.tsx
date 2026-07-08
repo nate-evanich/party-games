@@ -76,6 +76,20 @@ export default function RoomPage({ params }: { params: { code: string } }) {
     setTimeout(() => setCopied(false), 1500);
   }
 
+  function submitRename(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = renameInput.trim().slice(0, 24);
+    if (!trimmed) return;
+    const socket = getSocket();
+    socket.emit("room:rename", { name: trimmed });
+    localStorage.setItem(NAME_KEY, trimmed);
+    setName(trimmed);
+    setIsRenaming(false);
+    setRenameInput("");
+    setRenameToast(`Your name is now ${trimmed}`);
+    setTimeout(() => setRenameToast(null), 2500);
+  }
+
   // --- Name gate ---------------------------------------------------------
   if (!name) {
     return (

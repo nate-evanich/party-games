@@ -42,16 +42,22 @@ export default function RoomPage({ params }: { params: { code: string } }) {
     function onError(e: { message: string }) {
       setError(e.message);
     }
+    function onNothing(e: { message: string }) {
+      setToast(e.message);
+      setTimeout(() => setToast(null), 3000);
+    }
 
     socket.on("connect", join);
     socket.on("room:state", onState);
     socket.on("room:error", onError);
+    socket.on("room:nothing", onNothing);
     if (socket.connected) join();
 
     return () => {
       socket.off("connect", join);
       socket.off("room:state", onState);
       socket.off("room:error", onError);
+      socket.off("room:nothing", onNothing);
     };
   }, [name, code, requestedGame]);
 

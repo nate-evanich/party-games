@@ -181,6 +181,14 @@ export default function RoomPage({ params }: { params: { code: string } }) {
           </ul>
         </aside>
       </div>
+      {toast && (
+        <div
+          className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 cursor-pointer rounded-xl border border-white/20 bg-gray-900/95 px-6 py-4 shadow-2xl backdrop-blur"
+          onClick={() => setToast(null)}
+        >
+          <p className="text-sm font-semibold">{toast}</p>
+        </div>
+      )}
     </main>
   );
 }

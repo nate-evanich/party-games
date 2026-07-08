@@ -64,7 +64,12 @@ app.prepare().then(() => {
       if (!joinedCode) return;
       const room = getRoom(joinedCode);
       if (!room) return;
-      room.members.delete(socket.id);
+      const wasMember = room.members.delete(socket.id);
+      if (!wasMember) {
+        // Best-effort — socket is disconnecting so delivery is not guaranteed
+        socket.emit("popup", { message: "nothing happened" });
+        return;
+      }
       if (room.members.size === 0) {
         removeRoom(joinedCode);
         return;

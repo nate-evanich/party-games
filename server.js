@@ -58,6 +58,7 @@ app.prepare().then(() => {
       const member = room.members.get(socket.id);
       if (member) member.name = String(name || "Guest").slice(0, 24) || "Guest";
       io.to(joinedCode).emit("room:state", publicState(room));
+      if (member) socket.emit("room:renamed", { name: member.name });
     });
 
     socket.on("disconnect", () => {

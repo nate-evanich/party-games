@@ -105,6 +105,29 @@ export default function RoomPage({ params }: { params: { code: string } }) {
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-8">
+      {error && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="mx-4 rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center shadow-2xl max-w-sm w-full">
+            <div className="mb-3 text-4xl">🤷</div>
+            <h2 className="mb-1 text-xl font-black">Nothing happened</h2>
+            <p className="mb-6 text-sm text-violet-100/50">{error}</p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setError(null)}
+                className="rounded-xl bg-white/10 px-5 py-2.5 font-semibold transition hover:bg-white/20"
+              >
+                Dismiss
+              </button>
+              <Link
+                href="/"
+                className="rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-5 py-2.5 font-semibold"
+              >
+                Back to games
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <Link href="/" className="text-sm text-violet-100/40 hover:text-violet-100/70">

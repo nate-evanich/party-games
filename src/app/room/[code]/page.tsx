@@ -182,9 +182,34 @@ export default function RoomPage({ params }: { params: { code: string } }) {
                 key={m.id}
                 className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm"
               >
-                {m.name}
-                {m.id === me?.id && (
-                  <span className="ml-1.5 text-xs text-violet-300/70">(you)</span>
+                {m.id === me?.id && isRenaming ? (
+                  <form onSubmit={submitRename} className="flex gap-1">
+                    <input
+                      autoFocus
+                      value={renameInput}
+                      onChange={(e) => setRenameInput(e.target.value)}
+                      maxLength={24}
+                      className="min-w-0 flex-1 rounded bg-white/10 px-2 py-0.5 text-sm outline-none focus:ring-1 focus:ring-violet-400/50"
+                    />
+                    <button type="submit" className="text-violet-300 hover:text-white">✓</button>
+                    <button type="button" onClick={() => setIsRenaming(false)} className="text-violet-100/40 hover:text-white">✕</button>
+                  </form>
+                ) : (
+                  <>
+                    {m.name}
+                    {m.id === me?.id && (
+                      <>
+                        <span className="ml-1.5 text-xs text-violet-300/70">(you)</span>
+                        <button
+                          onClick={() => { setRenameInput(m.name); setIsRenaming(true); }}
+                          className="ml-1.5 text-xs text-violet-100/30 hover:text-violet-300"
+                          aria-label="Rename yourself"
+                        >
+                          ✏️
+                        </button>
+                      </>
+                    )}
+                  </>
                 )}
               </li>
             ))}

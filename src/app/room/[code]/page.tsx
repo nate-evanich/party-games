@@ -99,22 +99,6 @@ export default function RoomPage({ params }: { params: { code: string } }) {
     );
   }
 
-  // --- Room not found ----------------------------------------------------
-  if (error) {
-    return (
-      <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
-        <div className="text-5xl">🤷</div>
-        <h1 className="text-2xl font-black">{error}</h1>
-        <Link
-          href="/"
-          className="rounded-xl bg-white/10 px-5 py-3 font-semibold transition hover:bg-white/20"
-        >
-          Back to games
-        </Link>
-      </main>
-    );
-  }
-
   const gameId = state?.gameId || requestedGame;
   const meta = gameId ? getGameMeta(gameId) : undefined;
   const GameComponent = gameId ? GAME_COMPONENTS[gameId] : undefined;

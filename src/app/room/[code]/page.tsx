@@ -18,6 +18,7 @@ export default function RoomPage({ params }: { params: { code: string } }) {
   const [nameInput, setNameInput] = useState("");
   const [state, setState] = useState<RoomState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   // Load any remembered name on first paint.
@@ -41,16 +42,22 @@ export default function RoomPage({ params }: { params: { code: string } }) {
     function onError(e: { message: string }) {
       setError(e.message);
     }
+    function onNothing(e: { message: string }) {
+      setToast(e.message);
+      setTimeout(() => setToast(null), 3000);
+    }
 
     socket.on("connect", join);
     socket.on("room:state", onState);
     socket.on("room:error", onError);
+    socket.on("room:nothing", onNothing);
     if (socket.connected) join();
 
     return () => {
       socket.off("connect", join);
       socket.off("room:state", onState);
       socket.off("room:error", onError);
+      socket.off("room:nothing", onNothing);
     };
   }, [name, code, requestedGame]);
 
@@ -174,6 +181,14 @@ export default function RoomPage({ params }: { params: { code: string } }) {
           </ul>
         </aside>
       </div>
+      {toast && (
+        <div
+          className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 cursor-pointer rounded-xl border border-white/20 bg-gray-900/95 px-6 py-4 shadow-2xl backdrop-blur"
+          onClick={() => setToast(null)}
+        >
+          <p className="text-sm font-semibold">{toast}</p>
+        </div>
+      )}
     </main>
   );
 }

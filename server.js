@@ -29,7 +29,7 @@ app.prepare().then(() => {
       if (!room) {
         // A room can only be created by someone who picked a game.
         if (!gameId) {
-          socket.emit("room:error", { message: "That room doesn't exist." });
+          socket.emit("room:nothing", { message: "nothing happened" });
           return;
         }
         room = getOrCreateRoom(code, gameId);

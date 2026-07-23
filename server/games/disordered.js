@@ -77,7 +77,7 @@ function startRound(room, n) {
   const g = room.game;
   g.n = clampN(n);
   const set = pickSet(g.n);
-  room.private.secret = shuffle(set);
+  room.private.secret = shuffle(shuffle(set));
   g.palette = [...set].sort();
   g.roundId += 1;
   g.phase = "playing";

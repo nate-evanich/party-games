@@ -442,10 +442,10 @@ export default function Disordered({ socket, me, members, game }: GameProps) {
         {isHost && (phase === "playing" || phase === "revealed") && (
           <div className="mt-8 flex flex-wrap gap-2 border-t border-white/10 pt-4">
             <button
-              onClick={() => socket.emit("disordered:newRound", { n })}
+              onClick={() => socket.emit("disordered:newRound", { n: n + 1 })}
               className="rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold transition hover:bg-white/20"
             >
-              New round
+              New round (+1 difficulty)
             </button>
             {phase === "playing" && (
               <button

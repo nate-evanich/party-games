@@ -1,6 +1,6 @@
 // Two Truths & a Lie.
 //
-// Everyone submits 3 statements (server shuffles them so the lie's position is
+// Everyone submits 4 statements (server shuffles them so the lie's position is
 // random) and marks the lie. Then one player at a time is "featured": everyone
 // else votes which statement is the lie. Correct guessers score; the featured
 // player scores for every guesser they fool.
@@ -113,7 +113,7 @@ function register(io, socket, { room, broadcastState }) {
     }
     const key = myKey();
     if (!key || g.submitted.includes(key)) return;
-    if (!Array.isArray(statements) || statements.length !== 3) return;
+    if (!Array.isArray(statements) || statements.length !== 4) return;
     const clean = statements.map((s) => String(s || "").trim().slice(0, 140));
     if (clean.some((s) => !s)) return;
     const li = Number(lieIndex);

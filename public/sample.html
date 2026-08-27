@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎲 Party Games</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0d0b1a;
+      --text:         #f5f3ff;
+      --muted:        rgba(245, 243, 255, 0.55);
+      --very-muted:   rgba(245, 243, 255, 0.28);
+      --card-bg:      rgba(255, 255, 255, 0.05);
+      --card-border:  rgba(255, 255, 255, 0.10);
+      --pill-bg:      rgba(255, 255, 255, 0.07);
+      --violet-200:   #ddd6fe;
+      --violet-300:   #c4b5fd;
+      --violet-400:   #a78bfa;
+      --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(1200px 600px at 80% -10%, rgba(124, 92, 255, 0.25), transparent 60%),
+        radial-gradient(900px  500px at  0% 110%, rgba(255, 122,  89, 0.18), transparent 55%);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ───────────────────────────────────────────────────── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 5rem;
+    }
+
+    /* ── Header ───────────────────────────────────────────────────── */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 1rem;
+      margin-bottom: 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      background: var(--pill-bg);
+      font-size: 0.85rem;
+      color: var(--violet-200);
+      letter-spacing: 0.01em;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      /* gradient text */
+      background: linear-gradient(135deg, #ffffff 30%, var(--violet-300) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding-bottom: 0.1em;
+    }
+
+    .tagline {
+      margin-top: 1rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.1rem;
+      color: rgba(245, 243, 255, 0.65);
+    }
+
+    /* ── Section headings ─────────────────────────────────────────── */
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--violet-300);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Games grid ───────────────────────────────────────────────── */
+    .games-section { margin-bottom: 4rem; }
+
+    .grid {
+      display: grid;
+      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      padding: 1.5rem;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.20);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    /* accent glow blob in top-right corner */
+    .card-glow {
+      position: absolute;
+      top: -2rem;
+      right: -2rem;
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      opacity: 0.28;
+      filter: blur(28px);
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .card:hover .card-glow { opacity: 0.55; }
+
+    .card-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 0.85rem;
+      display: block;
+      line-height: 1;
+    }
+
+    .card-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-blurb {
+      font-size: 0.87rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+    }
+
+    .card-players { color: var(--very-muted); }
+
+    .badge-live {
+      font-weight: 600;
+      color: var(--violet-300);
+    }
+
+    .badge-soon {
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.10);
+      color: rgba(245, 243, 255, 0.45);
+      font-size: 0.75rem;
+    }
+
+    /* ── How to play ──────────────────────────────────────────────── */
+    .how-section { margin-bottom: 4rem; }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      counter-reset: step;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.1rem 1.3rem;
+      border-radius: 0.85rem;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7c5cff 0%, #a78bfa 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0.05rem;
+    }
+
+    .step-body { flex: 1; }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 0.97rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    code {
+      font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+      background: rgba(124, 92, 255, 0.2);
+      color: var(--violet-200);
+      padding: 0.1em 0.4em;
+      border-radius: 0.3em;
+      font-size: 0.88em;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--very-muted);
+    }
+
+    footer a {
+      color: var(--violet-400);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive tweaks ────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .page { padding: 2.5rem 1rem 4rem; }
+      h1 { font-size: 2.4rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ── Header ─────────────────────────────────────────────────── -->
+    <header>
+      <div class="pill">🎲 play together, instantly</div>
+      <h1>Party Games</h1>
+      <p class="tagline">
+        Quick, real-time multiplayer mini-games. Start a room, share the link,
+        play in seconds.
+      </p>
+    </header>
+
+    <!-- ── Games grid ─────────────────────────────────────────────── -->
+    <section class="games-section">
+      <h2 class="section-title">Games included</h2>
+      <div class="grid">
+
+        <!-- Random Picker -->
+        <article class="card">
+          <div class="card-glow" style="background:#7c5cff;"></div>
+          <span class="card-emoji">🎡</span>
+          <div class="card-name">Random Picker</div>
+          <p class="card-blurb">Spin the wheel to pick who goes next. Everyone's a slice.</p>
+          <div class="card-meta">
+            <span class="card-players">2+ players</span>
+            <span class="badge-live">Live →</span>
+          </div>
+        </article>
+
+        <!-- Disordered Order -->
+        <article class="card">
+          <div class="card-glow" style="background:#3ba9ff;"></div>
+          <span class="card-emoji">🔀</span>
+          <div class="card-name">Disordered Order</div>
+          <p class="card-blurb">Crack the hidden emoji order — we only tell you how many sit in the right spot.</p>
+          <div class="card-meta">
+            <span class="card-players">1+ players</span>
+            <span class="badge-live">Live →</span>
+          </div>
+        </article>
+
+        <!-- Beopardy -->
+        <article class="card">
+          <div class="card-glow" style="background:#ffb020;"></div>
+          <span class="card-emoji">🧠</span>
+          <div class="card-name">Beopardy</div>
+          <p class="card-blurb">Buzz in from your phone. Daily Doubles, Final Beopardy, zero lawsuits.</p>
+          <div class="card-meta">
+            <span class="card-players">2+ players</span>
+            <span class="badge-live">Live →</span>
+          </div>
+        </article>
+
+        <!-- Two Truths & a Lie -->
+        <article class="card">
+          <div class="card-glow" style="background:#ff7a59;"></div>
+          <span class="card-emoji">🕵️</span>
+          <div class="card-name">Two Truths &amp; a Lie</div>
+          <p class="card-blurb">Submit three statements, the room guesses the lie.</p>
+          <div class="card-meta">
+            <span class="card-players">3+ players</span>
+            <span class="badge-live">Live →</span>
+          </div>
+        </article>
+
+        <!-- Punchline -->
+        <article class="card">
+          <div class="card-glow" style="background:#ff5c8a;"></div>
+          <span class="card-emoji">🎤</span>
+          <div class="card-name">Punchline</div>
+          <p class="card-blurb">One prompt. Your funniest answer. The room votes.</p>
+          <div class="card-meta">
+            <span class="card-players">3+ players</span>
+            <span class="badge-live">Live →</span>
+          </div>
+        </article>
+
+        <!-- Buzzword Bingo -->
+        <article class="card" style="opacity:0.55; cursor:default;">
+          <div class="card-glow" style="background:#19c37d;"></div>
+          <span class="card-emoji">🟦</span>
+          <div class="card-name">Buzzword Bingo</div>
+          <p class="card-blurb">Mark the buzzwords as they get dropped. First to a line wins.</p>
+          <div class="card-meta">
+            <span class="card-players">2+ players</span>
+            <span class="badge-soon">Coming soon</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── How to play ─────────────────────────────────────────────── -->
+    <section class="how-section">
+      <h2 class="section-title">How to play</h2>
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Install</div>
+            <p class="step-desc">
+              Clone the repo and run <code>npm install</code>.
+              Node 20+ is the only prerequisite — no database, no Docker, no external services.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Run</div>
+            <p class="step-desc">
+              Start the server with <code>npm run dev</code> and open
+              <code>http://localhost:3000</code>. Pick any game to create a room instantly.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Share the room code</div>
+            <p class="step-desc">
+              Send the short room code (or link) to friends. They join from any browser —
+              on the same network or anywhere on the internet if you deploy it.
+              No accounts, no installs for players.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Footer ─────────────────────────────────────────────────── -->
+    <footer>
+      <p>
+        An open-source real-time multiplayer games starter &mdash;
+        MIT licensed, built with Next.js + Socket.IO.
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>
